@@ -96,8 +96,8 @@ func (s *SlackSender) SetPayload(msg string) *SlackSender {
 		Type: "divider",
 	})
 
-	t := fmt.Sprintf("- ARN : %s\n- 소스 버전 : %s\n- 시작 시간 : %s\n- URL: %s",
-		os.Getenv("CODEBUILD_BUILD_ARN"), os.Getenv("CODEBUILD_SOURCE_VERSION"), os.Getenv("CODEBUILD_START_TIME"), os.Getenv("CODEBUILD_PUBLIC_BUILD_URL"))
+	t := fmt.Sprintf("- ARN : %s\n- 소스 버전 : %s\n- 시간 : %s",
+		os.Getenv("CODEBUILD_BUILD_ARN"), os.Getenv("CODEBUILD_SOURCE_VERSION"), GetNow())
 	if s.NotifyStatus {
 		if os.Getenv("CODEBUILD_BUILD_SUCCEEDING") == "1" {
 			t = t + "\n- 빌드 결과 : ✅ Success"
@@ -119,6 +119,12 @@ func CheckUrl(url string) {
 	if resp.StatusCode != 400 {
 		log.Fatal("url이 유효하지 않습니다.")
 	}
+}
+
+func GetNow() string {
+	loc, err := time.LoadLocation("Asia/Seoul")
+	errorHandler(err)
+	return time.Now().In(loc).String()
 }
 
 func errorHandler(err error) {
