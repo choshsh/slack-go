@@ -23,18 +23,27 @@ RUN wget -q https://github.com/choshsh/slack-go/releases/latest/download/slack-g
 | msg | String | Slack 메시지 | -msg '빌드를 시작합니다’ |
 | notifyStatus | Boolean | (Optional) 빌드 결과를 알림에 포함할지 여부. Default false | -notifyStatus true |
 
-### buildspec.yml
+### AWS 설정
 
-aws codebuild 스크립트에 slack-go 명령어를 추가합니다.
-
-```yaml
-phases:
-  pre_build:
-    commands: slack-go -msg '빌드를 시작합니다'
-	...
-  post_build:
-    commands: slack-go -msg '빌드가 종료됐습니다' -notifyStatus true
-```
+- CodeBuild
+    
+    환경변수를 추가합니다.
+    
+    ![https://user-images.githubusercontent.com/40452325/151839371-630a053a-b6fe-4cb5-9e54-cfc8e54ee442.png](https://user-images.githubusercontent.com/40452325/151839371-630a053a-b6fe-4cb5-9e54-cfc8e54ee442.png)
+    
+- buildspec.yml
+    
+    aws codebuild 스크립트에 slack-go 명령어를 추가합니다.
+    
+    ```yaml
+    phases:
+      pre_build:
+        commands: slack-go -msg '빌드를 시작합니다'
+      ...
+      post_build:
+        commands: slack-go -msg '빌드가 종료됐습니다' -notifyStatus true
+    ```
+    
 
 ### 실행 예시
 
